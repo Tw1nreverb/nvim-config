@@ -139,7 +139,7 @@ local on_attach = function(client, bufnr)
       hint_prefix = '👻 '
     }, bufnr)  -- Note: add in lsp client on-attach
 end
-local servers = { 'pyright', 'rust_analyzer' }
+local servers = { 'pyright' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
