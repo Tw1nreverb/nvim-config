@@ -27,6 +27,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCM
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'https://github.com/jremmen/vim-ripgrep.git'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 call plug#end()
 colorscheme gruvbox
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -196,4 +197,8 @@ require"toggleterm".setup{
     end
     
     vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
+	require("bufferline").setup{}
+	vim.keymap.set('n', '<Tab>', ':BufferLineCycleNext<CR>')
+	vim.keymap.set('n', '<s-Tab>', ':BufferLineCyclePrev<CR>')
+	vim.keymap.set('n', '<leader>X', ':BufferLineCloseRight<CR>')
 EOF
