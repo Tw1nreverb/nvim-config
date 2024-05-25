@@ -185,10 +185,11 @@ require"toggleterm".setup{
 	shade_filetypes = {},
 	shade_terminals = true,
 	shading_factor = 1,
-	shell = "pwsh.exe",
+	shell = 'pwsh.exe',
+	direction = 'horizontal',
 	}
-local Terminal  = require('toggleterm.terminal').Terminal
-local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+    local Terminal  = require('toggleterm.terminal').Terminal
+    local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = 'float' })
     
     function _lazygit_toggle()
       lazygit:toggle()
