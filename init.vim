@@ -1,4 +1,4 @@
-set number
+set number  
 set relativenumber
 set autoindent
 set tabstop=4
@@ -28,6 +28,8 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'https://github.com/jremmen/vim-ripgrep.git'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
+Plug 'Pocco81/auto-save.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
 call plug#end()
 colorscheme gruvbox
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -201,4 +203,8 @@ require"toggleterm".setup{
 	vim.keymap.set('n', '<Tab>', ':BufferLineCycleNext<CR>')
 	vim.keymap.set('n', '<s-Tab>', ':BufferLineCyclePrev<CR>')
 	vim.keymap.set('n', '<leader>X', ':BufferLineCloseRight<CR>')
+	require("auto-save").setup(
+    {
+    }
+	)
 EOF
