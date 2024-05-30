@@ -8,9 +8,16 @@ set softtabstop=4
 set mouse=a
 set encoding=UTF-8
 set noswapfile
+nnoremap <silent> <leader>f :Format<CR>
+nnoremap <silent> <leader>F :FormatWrite<CR>
+augroup FormatAutogroup
+  autocmd!
+  autocmd BufWritePost * FormatWrite
+augroup END
 call plug#begin()
 Plug 'vim-airline/vim-airline'
 Plug 'preservim/nerdtree'
+Plug 'mhartington/formatter.nvim'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'https://github.com/tpope/vim-fugitive.git'
@@ -32,6 +39,7 @@ Plug 'Pocco81/auto-save.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 call plug#end()
 colorscheme gruvbox
+nnoremap ,<space> :nohlsearch<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -207,4 +215,31 @@ require"toggleterm".setup{
     {
     }
 	)
+-- Utilities for creating configurations
+local util = require "formatter.util"
+
+-- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
+require("formatter").setup {
+  -- Enable or disable logging
+  logging = true,
+  -- Set the log level
+  log_level = vim.log.levels.WARN,
+  -- All formatter configurations are opt-in
+  filetype = {
+	  python = {
+		  require("formatter.filetypes.python").yapf,
+	  },
+    -- Formatter configurations for filetype "lua" go here
+    -- and will be executed in order
+   lua = {
+      -- "formatter.filetypes.lua" defines default configurations for the
+      -- "lua" filetype
+      require("formatter.filetypes.lua").stylua,
+
+    }, 
+
+    -- Use the special "*" filetype for defining formatter configurations on
+    -- any filetype
+      }
+}
 EOF
