@@ -27,7 +27,7 @@ Plug 'morhetz/gruvbox'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'L3MON4D3/LuaSnip'
+Plug 'L3MON4D3/LuaSnip',{'do': 'make install_jsregexp'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.6' }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
@@ -37,6 +37,7 @@ Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 Plug 'Pocco81/auto-save.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
+Plug 'rafamadriz/friendly-snippets'
 call plug#end()
 colorscheme gruvbox
 nnoremap ,<space> :nohlsearch<CR>
@@ -55,9 +56,6 @@ local async = require "plenary.async"
 -- nvim-cmp setup
 local cmp = require 'cmp'
 cmp.setup {
-	completion = {
-    autocomplete = false
-	},	
     snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body)
@@ -152,9 +150,14 @@ local on_attach = function(client, bufnr)
     }, bufnr)  -- Note: add in lsp client on-attach
 end
 local servers = { 'pyright' }
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+require("luasnip.loaders.from_vscode").load {
+    include = { "python" },
+}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
+	capabilities = lsp_capabilities,
     flags = {
       debounce_text_changes = 150,
     }
