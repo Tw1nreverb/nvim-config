@@ -10,9 +10,6 @@ set encoding=UTF-8
 set noswapfile
 nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
-augroup FormatAutogroup
-  autocmd!
-  autocmd BufWritePost * FormatWrite
 augroup END
 call plug#begin()
 Plug 'vim-airline/vim-airline'
@@ -23,10 +20,11 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/airblade/vim-gitgutter.git'
 Plug 'neovim/nvim-lspconfig'
-Plug 'morhetz/gruvbox'
+Plug 'https://github.com/ellisonleao/gruvbox.nvim'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'L3MON4D3/LuaSnip',{'do': 'make install_jsregexp'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.6' }
@@ -146,7 +144,7 @@ local on_attach = function(client, bufnr)
       floating_window_above_cur_line = true,
       floating_window_off_x = 20,
       doc_lines = 10,
-      hint_prefix = '👻 '
+      hint_prefix = ''
     }, bufnr)  -- Note: add in lsp client on-attach
 end
 local servers = { 'pyright' }
