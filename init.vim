@@ -8,6 +8,7 @@ set softtabstop=4
 set mouse=a
 set encoding=UTF-8
 set noswapfile
+set laststatus=3
 nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
 augroup END
