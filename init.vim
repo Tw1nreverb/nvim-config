@@ -13,7 +13,9 @@ nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
 augroup END
 call plug#begin()
-Plug 'vim-airline/vim-airline'
+Plug 'windwp/nvim-autopairs'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'https://github.com/airblade/vim-rooter.git'
 Plug 'preservim/nerdtree'
 Plug 'mhartington/formatter.nvim'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -49,6 +51,7 @@ inoremap jk <esc>
 
 lua << EOF
 vim.o.completeopt = 'menuone,noselect'
+require("nvim-autopairs").setup {}
 -- luasnip setup
 local luasnip = require 'luasnip'
 local async = require "plenary.async"
@@ -244,6 +247,7 @@ require("formatter").setup {
     -- any filetype
       }
 }
+require('lualine').setup()
 EOF
 set keymap=russian-jcukenwin
 set iminsert=0
