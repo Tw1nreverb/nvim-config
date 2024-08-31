@@ -8,12 +8,14 @@ set softtabstop=4
 set mouse=a
 set encoding=UTF-8
 set noswapfile
+set laststatus=3
 nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
 augroup END
 call plug#begin()
 Plug 'windwp/nvim-autopairs'
-Plug 'vim-airline/vim-airline'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'https://github.com/airblade/vim-rooter.git'
 Plug 'preservim/nerdtree'
 Plug 'mhartington/formatter.nvim'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -245,6 +247,7 @@ require("formatter").setup {
     -- any filetype
       }
 }
+require('lualine').setup()
 EOF
 set keymap=russian-jcukenwin
 set iminsert=0
