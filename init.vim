@@ -9,6 +9,8 @@ set mouse=a
 set encoding=UTF-8
 set noswapfile
 set laststatus=3
+set iminsert=0
+set imsearch=0
 nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
 augroup END
@@ -40,8 +42,10 @@ Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 Plug 'Pocco81/auto-save.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'rafamadriz/friendly-snippets'
+Plug 'junegunn/fzf.vim'
 call plug#end()
 colorscheme gruvbox
+set rtp+=/home/linuxbrew/.linuxbrew/opt/fzf
 nnoremap ,<space> :nohlsearch<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
@@ -103,19 +107,6 @@ cmp.setup {
 	{name = 'buffer'},
   },
 }
-function filter(arr, func)
-	-- Filter in place
-	-- https://stackoverflow.com/questions/49709998/how-to-filter-a-lua-array-inplace
-	local new_index = 1
-	local size_orig = #arr
-	for old_index, v in ipairs(arr) do
-		if func(v, old_index) then
-			arr[new_index] = v
-			new_index = new_index + 1
-		end
-	end
-	for i = new_index, size_orig do arr[i] = nil end
-end
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
 
@@ -220,6 +211,24 @@ require("formatter").setup {
       }
 }
 require('lualine').setup()
+-- nvim-tree-sitter
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "python","lua", "vim", "vimdoc", "markdown", "markdown_inline" },
+  sync_install = false,
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+  indent = {enable = true},
+  incremental_selection = {
+	  enable = true,
+	  keymaps = {
+		  init_selection="<C-space>",
+		  node_incremental="<C-space>",
+		  scope_incremental=false,
+		  node_incremental = "<bs>",
+		  },
+	  },
+}
 EOF
-set iminsert=0
-set imsearch=0
