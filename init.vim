@@ -14,6 +14,7 @@ nnoremap <silent> <leader>F :FormatWrite<CR>
 augroup END
 call plug#begin()
 Plug 'windwp/nvim-autopairs'
+Plug 'https://github.com/hrsh7th/cmp-buffer.git'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'https://github.com/airblade/vim-rooter.git'
 Plug 'preservim/nerdtree'
@@ -48,7 +49,6 @@ nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 inoremap jk <esc>
-
 lua << EOF
 vim.o.completeopt = 'menuone,noselect'
 require("nvim-autopairs").setup {}
@@ -56,6 +56,10 @@ require("nvim-autopairs").setup {}
 local luasnip = require 'luasnip'
 local async = require "plenary.async"
 -- nvim-cmp setup
+--require("luasnip.loaders.from_vscode").load {
+--    include = { "python" },
+--}
+require("luasnip.loaders.from_vscode").lazy_load()
 local cmp = require 'cmp'
 cmp.setup {
     snippet = {
@@ -96,6 +100,7 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+	{name = 'buffer'},
   },
 }
 function filter(arr, func)
@@ -153,9 +158,6 @@ local on_attach = function(client, bufnr)
 end
 local servers = { 'pyright' }
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-require("luasnip.loaders.from_vscode").load {
-    include = { "python" },
-}
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -165,36 +167,6 @@ for _, lsp in ipairs(servers) do
     }
   }
 end
-function filter_diagnostics(diagnostic)
-	-- Only filter out Pyright stuff for now
-	if diagnostic.source ~= "Pyright" then
-		return true
-	end
-
-	-- Allow kwargs to be unused, sometimes you want many functions to take the
-	-- same arguments but you don't use all the arguments in all the functions,
-	-- so kwargs is used to suck up all the extras
-	if diagnostic.message == '"kwargs" is not accessed' then
-		return false
-	end
-	if diagnostic.message == '"args" is not accessed' then
-		return false
-	end
-	-- Allow variables starting with an underscore
-	if string.match(diagnostic.message, '"_.+" is not accessed') then
-		return false
-	end
-
-	return true
-end
-
-function custom_on_publish_diagnostics(a, params, client_id, c, config)
-	filter(params.diagnostics, filter_diagnostics)
-	vim.lsp.diagnostic.on_publish_diagnostics(a, params, client_id, c, config)
-end
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-	custom_on_publish_diagnostics, {})
 require"toggleterm".setup{
 	size = 13,
 	open_mapping = [[<c-\>]],
@@ -232,7 +204,7 @@ require("formatter").setup {
   -- All formatter configurations are opt-in
   filetype = {
 	  python = {
-		  require("formatter.filetypes.python").yapf,
+		  require("formatter.filetypes.python").ruff,
 	  },
     -- Formatter configurations for filetype "lua" go here
     -- and will be executed in order
@@ -249,7 +221,5 @@ require("formatter").setup {
 }
 require('lualine').setup()
 EOF
-set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
-vnoremap <C-C> "+y
