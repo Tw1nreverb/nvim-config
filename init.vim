@@ -71,6 +71,9 @@ cmp.setup {
       require('luasnip').lsp_expand(args.body)
     end,
   },
+  completion = {
+	  autocomplete = false
+  },
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
@@ -82,20 +85,16 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
-      elseif luasnip.expand_or_jumpable() then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
+	['<Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
       else
         fallback()
       end
     end,
-    ['<S-Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true, true, true), 'n')
-      elseif luasnip.jumpable(-1) then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-jump-prev', true, true, true), '')
+	['<S-Tab>'] = function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
       else
         fallback()
       end
@@ -232,3 +231,4 @@ require'nvim-treesitter.configs'.setup {
 	  },
 }
 EOF
+inoremap <C-x><C-o> <Cmd>lua require('cmp').complete()<CR>
