@@ -15,6 +15,7 @@ nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
 augroup END
 call plug#begin()
+Plug 'https://github.com/kylechui/nvim-surround.git'
 Plug 'windwp/nvim-autopairs'
 Plug 'https://github.com/hrsh7th/cmp-buffer.git'
 Plug 'nvim-lualine/lualine.nvim'
@@ -230,5 +231,8 @@ require'nvim-treesitter.configs'.setup {
 		  },
 	  },
 }
+require("nvim-surround").setup({
+            -- Configuration here, or leave empty to use defaults
+})
 EOF
 inoremap <C-x><C-o> <Cmd>lua require('cmp').complete()<CR>
