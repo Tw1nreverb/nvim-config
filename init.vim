@@ -50,6 +50,12 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fc <cmd>Telescope grep_string<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>d "_d
+xnoremap <leader>d "_d
+xnoremap <leader>p "_dP
+set clipboard=unnamedplus
 inoremap jk <esc>
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
@@ -245,3 +251,4 @@ require("nvim-surround").setup({
             -- Configuration here, or leave empty to use defaults
 })
 EOF
+autocmd FileType python let b:coc_root_patterns = ['.git', '.env']
