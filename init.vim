@@ -4,7 +4,7 @@ set autoindent
 set tabstop=4
 set shiftwidth=4
 set smarttab
-set softtabstop=4
+set softtabstop=6
 set mouse=a
 set encoding=UTF-8
 set noswapfile
@@ -15,19 +15,11 @@ augroup END
 call plug#begin()
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'https://github.com/kylechui/nvim-surround.git'
-Plug 'https://github.com/hrsh7th/cmp-buffer.git'
-Plug 'nvim-lualine/lualine.nvim'
 Plug 'https://github.com/airblade/vim-rooter.git'
+Plug 'https://github.com/nvim-lualine/lualine.nvim'
 Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'https://github.com/tpope/vim-fugitive.git'
 Plug 'https://github.com/airblade/vim-gitgutter.git'
-Plug 'neovim/nvim-lspconfig'
 Plug 'https://github.com/ellisonleao/gruvbox.nvim'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'L3MON4D3/LuaSnip',{'do': 'make install_jsregexp'}
 Plug 'nvim-lua/plenary.nvim'
@@ -36,9 +28,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCM
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'https://github.com/jremmen/vim-ripgrep.git'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 Plug 'Pocco81/auto-save.nvim'
-Plug 'nvim-tree/nvim-web-devicons'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'junegunn/fzf.vim'
 call plug#end()
@@ -149,14 +139,6 @@ xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
 " Remap <C-f> and <C-b> to scroll float windows/popups
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-endif
 
 " Use CTRL-S for selections ranges
 " Requires 'textDocument/selectionRange' support of language server
@@ -194,10 +176,9 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
 lua << EOF
 vim.o.completeopt = 'menuone,noselect'
---require("nvim-autopairs").setup {}
--- luasnip setup
 require("luasnip.loaders.from_vscode").lazy_load()
 local async = require "plenary.async"
 require"toggleterm".setup{
@@ -217,16 +198,33 @@ require"toggleterm".setup{
     end
     
     vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
-	require("bufferline").setup{}
-	vim.keymap.set('n', '<Tab>', ':BufferLineCycleNext<CR>')
-	vim.keymap.set('n', '<s-Tab>', ':BufferLineCyclePrev<CR>')
-	vim.keymap.set('n', '<leader>X', ':BufferLineCloseRight<CR>')
 	require("auto-save").setup(
     {
     }
 	)
--- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
-require('lualine').setup()
+require('lualine').setup{
+	options = {
+		component_separators='|',		
+	},
+	sections = {
+		lualine_a = {'mode'},
+		lualine_b={'filename','branch'},
+		lualine_c = {},
+		lualine_x = {},
+		lualine_y = {'filetype','progress'},
+		lualine_z = {'location'},
+	},
+	inactive_sections={
+		lualine_a = {'filename' },
+		lualine_b = {},
+		lualine_c = {},
+		lualine_x = {},
+		lualine_y = {},
+		lualine_z = {'location' },
+	},
+	tabline = {},
+	extensions = {},
+}
 -- nvim-tree-sitter
 require'nvim-treesitter.configs'.setup {
   ensure_installed = { "python","lua", "vim", "vimdoc", "markdown", "markdown_inline" },
