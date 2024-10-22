@@ -13,6 +13,7 @@ set iminsert=0
 set imsearch=0
 augroup END
 call plug#begin()
+Plug 'https://github.com/xiyaowong/transparent.nvim.git'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'https://github.com/kylechui/nvim-surround.git'
 Plug 'https://github.com/airblade/vim-rooter.git'
@@ -247,6 +248,24 @@ require'nvim-treesitter.configs'.setup {
 }
 require("nvim-surround").setup({
             -- Configuration here, or leave empty to use defaults
+})
+ -- Optional, you don't have to run setup.
+require("transparent").setup({
+  -- table: default groups
+  groups = {
+    'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+    'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+    'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+    'SignColumn', 'CursorLine', 'CursorLineNr', 'StatusLine', 'StatusLineNC',
+    'EndOfBuffer',
+  },
+  -- table: additional groups that should be cleared
+  extra_groups = {},
+  -- table: groups you don't want to clear
+  exclude_groups = {},
+  -- function: code to be executed after highlight groups are cleared
+  -- Also the user event "TransparentClear" will be triggered
+  on_clear = function() end,
 })
 EOF
 autocmd FileType python let b:coc_root_patterns = ['.git', '.env']
